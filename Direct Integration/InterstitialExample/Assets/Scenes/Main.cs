@@ -115,11 +115,7 @@ public class Main : MonoBehaviour
     }
 
 
-    public void OnAdError(OguryError oguryError)
-    {
-        logger.LogLoadingAdMessage();
-    }
-
+    
     void OnAdError(OguryInterstitialAd interstitialAd, OguryError error)
     {
         logger.LogOnAdErrordMessage(String.Format("Ad Error {0} - {1}", error.ErrorCode, error.Description));
