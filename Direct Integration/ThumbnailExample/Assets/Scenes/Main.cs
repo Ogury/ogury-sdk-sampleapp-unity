@@ -11,10 +11,11 @@ public class Main : MonoBehaviour
 	public static string ANDROID_ASSET_KEY = "OGY-E16CBF165165";
 	public static string IOS_ASSET_KEY = "OGY-5575CC173955";
 
-	public static string ANDROID_OPTINVIDEO_AD_UNIT_ID = "20a99c20-bab1-0138-ceb5-0242ac120004_test";
-    public static string IOS_OPTINVIDEO_AD_UNIT_ID = "b1773ac0-4a9d-0138-d91c-0242ac120004_test";
+	public static string ANDROID_THUMBNAIL_AD_UNIT_ID = "2c137ab0-bab1-0138-db2a-0242ac120004_test";
+    public static string IOS_THUMBNAIL_AD_UNIT_ID = "7fe46720-4a9f-0138-0f06-0242ac120004_test";
 
-    public OguryOptinVideoAd _optinVideo;
+    public OguryThumbnailAd _thumbnailAd;
+   
 
    
 
@@ -23,11 +24,12 @@ public class Main : MonoBehaviour
     {
         logger = FindObjectOfType(typeof(Logger)) as Logger;
 
-
+        
         Ogury.Start(ANDROID_ASSET_KEY, IOS_ASSET_KEY);
+   
 
-        _optinVideo = new OguryOptinVideoAd(ANDROID_OPTINVIDEO_AD_UNIT_ID,
-            IOS_OPTINVIDEO_AD_UNIT_ID);
+        _thumbnailAd = new OguryThumbnailAd(ANDROID_THUMBNAIL_AD_UNIT_ID,
+            IOS_THUMBNAIL_AD_UNIT_ID);
 
         // get user consent
         OguryChoiceManager.OnAskComplete += OnCMComplete;
@@ -35,42 +37,36 @@ public class Main : MonoBehaviour
         OguryChoiceManager.Ask();
 
 
-        _optinVideo.OnAdLoaded += ad =>
+        _thumbnailAd.OnAdLoaded += ad =>
         {
             // ...
             logger.LogAdLoadedMessage();
         };
 
-        _optinVideo.OnAdRewarded += (ad, rewardItem) =>
-        {
-            // reward the user here
-            logger.LogUserReward(String.Format("User has received reward {0} with value: {1}",
-                rewardItem.Name,rewardItem.Value));
-        };
 
-
-        _optinVideo.OnAdNotAvailable += ad =>
+        _thumbnailAd.OnAdNotAvailable += ad =>
         {
             // ...
             logger.LogAdNotAvailableMessage();
         };
 
-        _optinVideo.OnAdDisplayed += ad =>
+        _thumbnailAd.OnAdDisplayed += ad =>
         {
             // ...
             logger.LogOnAdDisplayedMessage();
         };
 
-        _optinVideo.OnAdClosed += ad =>
+        _thumbnailAd.OnAdClosed += ad =>
         {
             // ...
             logger.LogOnAdClosedMessage();
         };
 
-        _optinVideo.OnAdError += OnAdError;
 
 
-        logger.LogLoadingAdMessage();
+        _thumbnailAd.OnAdError += OnAdError;
+
+        logger.LogOnAdDisplayedMessage();
     }
 
 
@@ -95,6 +91,8 @@ public class Main : MonoBehaviour
     {
         Ogury.StartAds();
         // start vendors' SDKs
+
+
     }
 
     private void PassConsentToOtherSdks()
@@ -106,19 +104,20 @@ public class Main : MonoBehaviour
     {
         logger.LogLoadingAdMessage();
         // load the intertitial ad
-        _optinVideo.Load();
+        _thumbnailAd.Load(180,180);
     }
 
-    public void ShowOptinVideo()
+    public void ShowThumbnailAd()
     {
-        if (_optinVideo.Loaded)
+        if (_thumbnailAd.Loaded)
         {
-            _optinVideo.Show();
+            _thumbnailAd.Show(OguryThumbnailAdGravity.BottomRight,0, 0);
         }
+
     }
 
 
-    void OnAdError(OguryOptinVideoAd oguryOptinVideoAd, OguryError error)
+    void OnAdError(OguryThumbnailAd oguryThumbnailAd, OguryError error)
     {
         logger.LogOnAdErrordMessage(String.Format("Ad Error {0} - {1}", error.ErrorCode, error.Description));
     }
