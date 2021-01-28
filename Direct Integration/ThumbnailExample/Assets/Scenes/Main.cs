@@ -24,8 +24,11 @@ public class Main : MonoBehaviour
     {
         logger = FindObjectOfType(typeof(Logger)) as Logger;
 
-        
+    
         Ogury.Start(ANDROID_ASSET_KEY, IOS_ASSET_KEY);
+        
+        
+        
    
 
         _thumbnailAd = new OguryThumbnailAd(ANDROID_THUMBNAIL_AD_UNIT_ID,
@@ -72,6 +75,7 @@ public class Main : MonoBehaviour
 
     private void OnCMComplete(Answer answer)
     {
+        logger.LogConsent(String.Format("Consent {0}", answer.ToString()));
         PassConsentToOtherSdks();
         StartSdks();
         // load ad formats
@@ -80,6 +84,7 @@ public class Main : MonoBehaviour
 
     private void OnCMError(OguryError error)
     {
+        logger.LogConsent(String.Format("Consent {0} - {1}", error.ErrorCode, error.Description));
         PassConsentToOtherSdks();
         StartSdks();
         // load ad formats

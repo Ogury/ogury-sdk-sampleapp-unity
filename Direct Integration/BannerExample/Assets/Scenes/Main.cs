@@ -11,12 +11,16 @@ public class Main : MonoBehaviour
 	public static string ANDROID_ASSET_KEY = "OGY-E16CBF165165";
 	public static string IOS_ASSET_KEY = "OGY-5575CC173955";
 
-	public static string ANDROID_OPTINVIDEO_AD_UNIT_ID = "20a99c20-bab1-0138-ceb5-0242ac120004_test";
-    public static string IOS_OPTINVIDEO_AD_UNIT_ID = "b1773ac0-4a9d-0138-d91c-0242ac120004_test";
+	public static string ANDROID_SMALL_BANNER_AD_UNIT_ID = "3b6dd5e0-bab1-0138-76e8-0242ac120004_test";
+    public static string IOS_SMALL_BANNER_AD_UNIT_ID = "c3a1a5e0-4f39-0138-42f4-0242ac120004_test";
 
-    public OguryOptinVideoAd _optinVideo;
+    public static string ANDROID_MPU_BANNER_AD_UNIT_ID = "3530b2c0-bab1-0138-ceb6-0242ac120004_test";
+    public static string IOS_MPU_BANNER_UNIT_ID = "73eb6620-b234-0138-8e13-0242ac120004_test";
 
-   
+    public OguryBannerAd _small_banner;
+    public OguryBannerAd _mpu_banner;
+
+
 
     // Use this for initialization
     void Start()
@@ -26,8 +30,13 @@ public class Main : MonoBehaviour
 
         Ogury.Start(ANDROID_ASSET_KEY, IOS_ASSET_KEY);
 
-        _optinVideo = new OguryOptinVideoAd(ANDROID_OPTINVIDEO_AD_UNIT_ID,
-            IOS_OPTINVIDEO_AD_UNIT_ID);
+      
+
+        _small_banner = new OguryBannerAd(ANDROID_SMALL_BANNER_AD_UNIT_ID,
+            IOS_SMALL_BANNER_AD_UNIT_ID,OguryBannerAdSize.SmallBanner320X50);
+
+        _mpu_banner = new OguryBannerAd(ANDROID_MPU_BANNER_AD_UNIT_ID,
+            IOS_MPU_BANNER_UNIT_ID, OguryBannerAdSize.Mpu300X250);
 
         // get user consent
         OguryChoiceManager.OnAskComplete += OnCMComplete;
@@ -35,42 +44,31 @@ public class Main : MonoBehaviour
         OguryChoiceManager.Ask();
 
 
-        _optinVideo.OnAdLoaded += ad =>
+        _small_banner.OnAdLoaded += ad =>
         {
             // ...
-            logger.LogAdLoadedMessage();
+            logger.LogAdLoadedMessage("Small Banner");
         };
 
-        _optinVideo.OnAdRewarded += (ad, rewardItem) =>
-        {
-            // reward the user here
-            logger.LogUserReward(String.Format("User has received reward {0} with value: {1}",
-                rewardItem.Name,rewardItem.Value));
-        };
-
-
-        _optinVideo.OnAdNotAvailable += ad =>
+        _mpu_banner.OnAdLoaded += ad =>
         {
             // ...
-            logger.LogAdNotAvailableMessage();
+            logger.LogAdLoadedMessage("MPU");
         };
 
-        _optinVideo.OnAdDisplayed += ad =>
+
+
+        _small_banner.OnAdDisplayed += ad =>
         {
-            // ...
-            logger.LogOnAdDisplayedMessage();
+            logger.LogOnAdDisplayedMessage("Small Banner");
         };
 
-        _optinVideo.OnAdClosed += ad =>
+        _mpu_banner.OnAdDisplayed += ad =>
         {
-            // ...
-            logger.LogOnAdClosedMessage();
+            logger.LogOnAdDisplayedMessage("MPU");
         };
 
-        _optinVideo.OnAdError += OnAdError;
-
-
-        logger.LogLoadingAdMessage();
+        
     }
 
 
@@ -88,10 +86,24 @@ public class Main : MonoBehaviour
         logger.LogConsent(String.Format("Consent {0} - {1}", error.ErrorCode, error.Description));
         PassConsentToOtherSdks();
         StartSdks();
-        
         // load ad formats
         //LoadAdFormats();  
     }
+
+
+    public void LoadMPUBannerAd()
+    {
+        logger.LogLoadingAdMessage("MPU");
+        _mpu_banner.Load();
+    }
+
+
+    public void LoadSmallBannerAd()
+    {
+        logger.LogLoadingAdMessage("Small Banner");
+        _small_banner.Load();
+    }
+
 
 
     private void StartSdks()
@@ -107,23 +119,19 @@ public class Main : MonoBehaviour
 
     public void LoadAdFormats()
     {
-        logger.LogLoadingAdMessage();
         // load the intertitial ad
-        _optinVideo.Load();
+        _small_banner.Load();
+        _mpu_banner.Load();
     }
 
-    public void ShowOptinVideo()
+    public void ShowSmallBannerAd()
     {
-        if (_optinVideo.Loaded)
-        {
-            _optinVideo.Show();
-        }
+        _small_banner.Show(OguryAdGravity.Bottom, 0, 0);
     }
 
-
-    void OnAdError(OguryOptinVideoAd oguryOptinVideoAd, OguryError error)
+    public void ShowMPUBannerAd()
     {
-        logger.LogOnAdErrordMessage(String.Format("Ad Error {0} - {1}", error.ErrorCode, error.Description));
+        _mpu_banner.Show(OguryAdGravity.Bottom, 0, 250);
     }
 
 
