@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
 using System;
 
@@ -8,7 +7,7 @@ public class Logger : MonoBehaviour
 
     Text labelText;
 
-   
+
 
     // Use this for initialization
     void Start()
@@ -29,6 +28,11 @@ public class Logger : MonoBehaviour
     public void LogAdLoadedMessage()
     {
         DisplayText("Ad Loaded");
+    }
+
+    public void LogAdNotLoadedMessage()
+    {
+        DisplayText("Ad Not Loaded");
     }
 
 

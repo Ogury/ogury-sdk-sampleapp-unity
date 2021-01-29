@@ -51,6 +51,11 @@ public class Logger : MonoBehaviour
         DisplayText("Ad Closed");
     }
 
+    public void LogAdNotLoadedMessage()
+    {
+        DisplayText("Ad Not Loaded");
+    }
+
     public void LogOnAdErrordMessage(string error)
     {
         DisplayText(error);

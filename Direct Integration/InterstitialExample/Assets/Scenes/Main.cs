@@ -7,17 +7,16 @@ public class Main : MonoBehaviour
 {
     //used just for displaying messages
     Logger logger;
-    
-	public static string ANDROID_ASSET_KEY = "OGY-E16CBF165165";
-	public static string IOS_ASSET_KEY = "OGY-5575CC173955";
 
-	public static string ANDROID_INTERSTITIAL_AD_UNIT_ID = "18efd430-bab1-0138-ceb4-0242ac120004_test";
-    public static string IOS_INTERSTITIAL_AD_UNIT_ID = "cdab8440-4a9d-0138-0f05-0242ac120004_test";
+    public static string AndroidAssetKey = "OGY-E16CBF165165";
+    public static string IosAssetKey = "OGY-5575CC173955";
 
-    public OguryInterstitialAd _interstitial;
-    public OguryThumbnailAd oguryThumbnailAd;
+    public static string AndroidInterstitialAdUnitId = "18efd430-bab1-0138-ceb4-0242ac120004_test";
+    public static string IosInterstitialAdUnitId = "cdab8440-4a9d-0138-0f05-0242ac120004_test";
 
-   
+    private OguryInterstitialAd interstitialAd;
+
+
 
     // Use this for initialization
     void Start()
@@ -25,10 +24,10 @@ public class Main : MonoBehaviour
         logger = FindObjectOfType(typeof(Logger)) as Logger;
 
 
-        Ogury.Start(ANDROID_ASSET_KEY, IOS_ASSET_KEY);
+        Ogury.Start(AndroidAssetKey, IosAssetKey);
 
-        _interstitial = new OguryInterstitialAd(ANDROID_INTERSTITIAL_AD_UNIT_ID,
-            IOS_INTERSTITIAL_AD_UNIT_ID);
+        interstitialAd = new OguryInterstitialAd(AndroidInterstitialAdUnitId,
+            IosInterstitialAdUnitId);
 
         // get user consent
         OguryChoiceManager.OnAskComplete += OnCMComplete;
@@ -36,36 +35,36 @@ public class Main : MonoBehaviour
         OguryChoiceManager.Ask();
 
 
-        _interstitial.OnAdLoaded += ad =>
+        interstitialAd.OnAdLoaded += ad =>
         {
-            // ...
             logger.LogAdLoadedMessage();
         };
 
-
-        _interstitial.OnAdNotAvailable += ad =>
+        interstitialAd.OnAdNotLoaded += ad =>
         {
-            // ...
+            logger.LogAdNotLoadedMessage();
+        };
+
+
+        interstitialAd.OnAdNotAvailable += ad =>
+        {
             logger.LogAdNotAvailableMessage();
         };
 
-        _interstitial.OnAdDisplayed += ad =>
+        interstitialAd.OnAdDisplayed += ad =>
         {
-            // ...
             logger.LogOnAdDisplayedMessage();
         };
 
-        _interstitial.OnAdClosed += ad =>
+        interstitialAd.OnAdClosed += ad =>
         {
-            // ...
             logger.LogOnAdClosedMessage();
         };
 
 
 
-        _interstitial.OnAdError += OnAdError;
+        interstitialAd.OnAdError += OnAdError;
 
-        logger.LogOnAdDisplayedMessage();
     }
 
 
@@ -74,8 +73,7 @@ public class Main : MonoBehaviour
         logger.LogConsent(String.Format("Consent {0}", answer.ToString()));
         PassConsentToOtherSdks();
         StartSdks();
-        // load ad formats 
-        //LoadAdFormats();
+        //Load Ad formats
     }
 
     private void OnCMError(OguryError error)
@@ -83,8 +81,7 @@ public class Main : MonoBehaviour
         logger.LogConsent(String.Format("Consent {0} - {1}", error.ErrorCode, error.Description));
         PassConsentToOtherSdks();
         StartSdks();
-        // load ad formats
-        //LoadAdFormats();  
+        //Load Ad formats
     }
 
 
@@ -102,20 +99,20 @@ public class Main : MonoBehaviour
     public void LoadAdFormats()
     {
         logger.LogLoadingAdMessage();
-        // load the intertitial ad
-        _interstitial.Load();
+
+        interstitialAd.Load();
     }
 
     public void ShowInterstitial()
     {
-        if (_interstitial.Loaded)
+        if (interstitialAd.Loaded)
         {
-            _interstitial.Show();
+            interstitialAd.Show();
         }
     }
 
 
-    
+
     void OnAdError(OguryInterstitialAd interstitialAd, OguryError error)
     {
         logger.LogOnAdErrordMessage(String.Format("Ad Error {0} - {1}", error.ErrorCode, error.Description));

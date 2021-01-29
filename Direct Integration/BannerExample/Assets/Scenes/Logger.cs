@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
 using System;
 
@@ -23,12 +22,12 @@ public class Logger : MonoBehaviour
 
     public void LogLoadingAdMessage(string adType)
     {
-        DisplayText(String.Format("Loading {0}",adType));
+        DisplayText(String.Format("Loading {0}", adType));
     }
 
     public void LogAdLoadedMessage(string adType)
     {
-        DisplayText(String.Format("{0} Ad Loaded",adType));
+        DisplayText(String.Format("{0} Ad Loaded", adType));
     }
 
 
@@ -39,12 +38,17 @@ public class Logger : MonoBehaviour
 
     public void LogOnAdDisplayedMessage(string adType)
     {
-        DisplayText(String.Format("{0} Ad Displayed",adType));
+        DisplayText(String.Format("{0} Ad Displayed", adType));
     }
 
     public void LogOnAdClosedMessage()
     {
         DisplayText("Ad Closed");
+    }
+
+    public void LogAdNotLoadedMessage(string adType)
+    {
+        DisplayText(String.Format("{0} Ad Not Loaded", adType));
     }
 
     public void LogOnAdErrordMessage(string error)

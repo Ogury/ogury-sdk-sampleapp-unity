@@ -7,18 +7,18 @@ public class Main : MonoBehaviour
 {
     //used just for displaying messages
     Logger logger;
-    
-	public static string ANDROID_ASSET_KEY = "OGY-E16CBF165165";
-	public static string IOS_ASSET_KEY = "OGY-5575CC173955";
 
-	public static string ANDROID_SMALL_BANNER_AD_UNIT_ID = "3b6dd5e0-bab1-0138-76e8-0242ac120004_test";
-    public static string IOS_SMALL_BANNER_AD_UNIT_ID = "c3a1a5e0-4f39-0138-42f4-0242ac120004_test";
+    public static string AndroidAssetKey = "OGY-E16CBF165165";
+    public static string IosAssetKey = "OGY-5575CC173955";
 
-    public static string ANDROID_MPU_BANNER_AD_UNIT_ID = "3530b2c0-bab1-0138-ceb6-0242ac120004_test";
-    public static string IOS_MPU_BANNER_UNIT_ID = "73eb6620-b234-0138-8e13-0242ac120004_test";
+    public static string AndroidSmallBannerAdUnitId = "3b6dd5e0-bab1-0138-76e8-0242ac120004_test";
+    public static string IosSmallBannerAdUnitId = "c3a1a5e0-4f39-0138-42f4-0242ac120004_test";
 
-    public OguryBannerAd _small_banner;
-    public OguryBannerAd _mpu_banner;
+    public static string AndroidMpuBannerAdUnitId = "3530b2c0-bab1-0138-ceb6-0242ac120004_test";
+    public static string IosMpuBannerAdUnitId = "73eb6620-b234-0138-8e13-0242ac120004_test";
+
+    private OguryBannerAd smallBanner;
+    private OguryBannerAd mpuBanner;
 
 
 
@@ -28,15 +28,15 @@ public class Main : MonoBehaviour
         logger = FindObjectOfType(typeof(Logger)) as Logger;
 
 
-        Ogury.Start(ANDROID_ASSET_KEY, IOS_ASSET_KEY);
+        Ogury.Start(AndroidAssetKey, IosAssetKey);
 
-      
 
-        _small_banner = new OguryBannerAd(ANDROID_SMALL_BANNER_AD_UNIT_ID,
-            IOS_SMALL_BANNER_AD_UNIT_ID,OguryBannerAdSize.SmallBanner320X50);
 
-        _mpu_banner = new OguryBannerAd(ANDROID_MPU_BANNER_AD_UNIT_ID,
-            IOS_MPU_BANNER_UNIT_ID, OguryBannerAdSize.Mpu300X250);
+        smallBanner = new OguryBannerAd(AndroidSmallBannerAdUnitId,
+            IosSmallBannerAdUnitId, OguryBannerAdSize.SmallBanner320X50);
+
+        mpuBanner = new OguryBannerAd(AndroidMpuBannerAdUnitId,
+            IosMpuBannerAdUnitId, OguryBannerAdSize.Mpu300X250);
 
         // get user consent
         OguryChoiceManager.OnAskComplete += OnCMComplete;
@@ -44,31 +44,38 @@ public class Main : MonoBehaviour
         OguryChoiceManager.Ask();
 
 
-        _small_banner.OnAdLoaded += ad =>
+        smallBanner.OnAdLoaded += ad =>
         {
-            // ...
             logger.LogAdLoadedMessage("Small Banner");
         };
 
-        _mpu_banner.OnAdLoaded += ad =>
+        smallBanner.OnAdNotLoaded += ad =>
         {
-            // ...
+            logger.LogAdNotLoadedMessage("Small Banner");
+        };
+
+        mpuBanner.OnAdLoaded += ad =>
+        {
             logger.LogAdLoadedMessage("MPU");
         };
 
+        mpuBanner.OnAdNotLoaded += ad =>
+        {
+            logger.LogAdNotLoadedMessage("MPU");
+        };
 
 
-        _small_banner.OnAdDisplayed += ad =>
+        smallBanner.OnAdDisplayed += ad =>
         {
             logger.LogOnAdDisplayedMessage("Small Banner");
         };
 
-        _mpu_banner.OnAdDisplayed += ad =>
+        mpuBanner.OnAdDisplayed += ad =>
         {
             logger.LogOnAdDisplayedMessage("MPU");
         };
 
-        
+
     }
 
 
@@ -77,8 +84,7 @@ public class Main : MonoBehaviour
         logger.LogConsent(String.Format("Consent {0}", answer.ToString()));
         PassConsentToOtherSdks();
         StartSdks();
-        // load ad formats
-        //LoadAdFormats();
+        //Load Ad formats
     }
 
     private void OnCMError(OguryError error)
@@ -86,22 +92,21 @@ public class Main : MonoBehaviour
         logger.LogConsent(String.Format("Consent {0} - {1}", error.ErrorCode, error.Description));
         PassConsentToOtherSdks();
         StartSdks();
-        // load ad formats
-        //LoadAdFormats();  
+        //Load Ad formats
     }
 
 
     public void LoadMPUBannerAd()
     {
         logger.LogLoadingAdMessage("MPU");
-        _mpu_banner.Load();
+        mpuBanner.Load();
     }
 
 
     public void LoadSmallBannerAd()
     {
         logger.LogLoadingAdMessage("Small Banner");
-        _small_banner.Load();
+        smallBanner.Load();
     }
 
 
@@ -120,18 +125,18 @@ public class Main : MonoBehaviour
     public void LoadAdFormats()
     {
         // load the intertitial ad
-        _small_banner.Load();
-        _mpu_banner.Load();
+        smallBanner.Load();
+        mpuBanner.Load();
     }
 
     public void ShowSmallBannerAd()
     {
-        _small_banner.Show(OguryAdGravity.Bottom, 0, 0);
+        smallBanner.Show(OguryAdGravity.Bottom, 0, 0);
     }
 
     public void ShowMPUBannerAd()
     {
-        _mpu_banner.Show(OguryAdGravity.Bottom, 0, 250);
+        mpuBanner.Show(OguryAdGravity.Bottom, 0, 250);
     }
 
 

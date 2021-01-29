@@ -7,32 +7,32 @@ public class Main : MonoBehaviour
 {
     //used just for displaying messages
     Logger logger;
-    
-	public static string ANDROID_ASSET_KEY = "OGY-E16CBF165165";
-	public static string IOS_ASSET_KEY = "OGY-5575CC173955";
 
-	public static string ANDROID_THUMBNAIL_AD_UNIT_ID = "2c137ab0-bab1-0138-db2a-0242ac120004_test";
-    public static string IOS_THUMBNAIL_AD_UNIT_ID = "7fe46720-4a9f-0138-0f06-0242ac120004_test";
+    public static string AndroidAssetKey = "OGY-E16CBF165165";
+    public static string IosAssetKey = "OGY-5575CC173955";
 
-    public OguryThumbnailAd _thumbnailAd;
-   
+    public static string AndroidThumbnailAdUnitId = "2c137ab0-bab1-0138-db2a-0242ac120004_test";
+    public static string IosThumbnailAdUnitId = "7fe46720-4a9f-0138-0f06-0242ac120004_test";
 
-   
+    private OguryThumbnailAd thumbnailAd;
+
+
+
 
     // Use this for initialization
     void Start()
     {
         logger = FindObjectOfType(typeof(Logger)) as Logger;
 
-    
-        Ogury.Start(ANDROID_ASSET_KEY, IOS_ASSET_KEY);
-        
-        
-        
-   
 
-        _thumbnailAd = new OguryThumbnailAd(ANDROID_THUMBNAIL_AD_UNIT_ID,
-            IOS_THUMBNAIL_AD_UNIT_ID);
+        Ogury.Start(AndroidAssetKey, IosAssetKey);
+
+
+
+
+
+        thumbnailAd = new OguryThumbnailAd(AndroidThumbnailAdUnitId,
+            IosThumbnailAdUnitId);
 
         // get user consent
         OguryChoiceManager.OnAskComplete += OnCMComplete;
@@ -40,36 +40,34 @@ public class Main : MonoBehaviour
         OguryChoiceManager.Ask();
 
 
-        _thumbnailAd.OnAdLoaded += ad =>
+        thumbnailAd.OnAdLoaded += ad =>
         {
-            // ...
             logger.LogAdLoadedMessage();
         };
 
 
-        _thumbnailAd.OnAdNotAvailable += ad =>
+        thumbnailAd.OnAdNotAvailable += ad =>
         {
-            // ...
             logger.LogAdNotAvailableMessage();
         };
 
-        _thumbnailAd.OnAdDisplayed += ad =>
+        thumbnailAd.OnAdDisplayed += ad =>
         {
-            // ...
             logger.LogOnAdDisplayedMessage();
         };
 
-        _thumbnailAd.OnAdClosed += ad =>
+        thumbnailAd.OnAdClosed += ad =>
         {
-            // ...
             logger.LogOnAdClosedMessage();
         };
 
+        thumbnailAd.OnAdNotLoaded += ad =>
+        {
+            logger.LogAdNotLoadedMessage();
+        };
 
+        thumbnailAd.OnAdError += OnAdError;
 
-        _thumbnailAd.OnAdError += OnAdError;
-
-        logger.LogOnAdDisplayedMessage();
     }
 
 
@@ -78,8 +76,7 @@ public class Main : MonoBehaviour
         logger.LogConsent(String.Format("Consent {0}", answer.ToString()));
         PassConsentToOtherSdks();
         StartSdks();
-        // load ad formats
-        //LoadAdFormats();
+        //Load Ad formats
     }
 
     private void OnCMError(OguryError error)
@@ -87,8 +84,7 @@ public class Main : MonoBehaviour
         logger.LogConsent(String.Format("Consent {0} - {1}", error.ErrorCode, error.Description));
         PassConsentToOtherSdks();
         StartSdks();
-        // load ad formats
-        //LoadAdFormats();  
+        //Load Ad formats
     }
 
 
@@ -108,15 +104,15 @@ public class Main : MonoBehaviour
     public void LoadAdFormats()
     {
         logger.LogLoadingAdMessage();
-        // load the intertitial ad
-        _thumbnailAd.Load(180,180);
+
+        thumbnailAd.Load(180, 180);
     }
 
     public void ShowThumbnailAd()
     {
-        if (_thumbnailAd.Loaded)
+        if (thumbnailAd.Loaded)
         {
-            _thumbnailAd.Show(OguryThumbnailAdGravity.BottomRight,0, 0);
+            thumbnailAd.Show(OguryThumbnailAdGravity.BottomRight, 0, 0);
         }
 
     }
