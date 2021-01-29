@@ -24,12 +24,7 @@ public class Main : MonoBehaviour
     {
         logger = FindObjectOfType(typeof(Logger)) as Logger;
 
-
         Ogury.Start(AndroidAssetKey, IosAssetKey);
-
-
-
-
 
         thumbnailAd = new OguryThumbnailAd(AndroidThumbnailAdUnitId,
             IosThumbnailAdUnitId);
@@ -44,7 +39,6 @@ public class Main : MonoBehaviour
         {
             logger.LogAdLoadedMessage();
         };
-
 
         thumbnailAd.OnAdNotAvailable += ad =>
         {
@@ -87,7 +81,6 @@ public class Main : MonoBehaviour
         //Load Ad formats
     }
 
-
     private void StartSdks()
     {
         Ogury.StartAds();
@@ -117,12 +110,10 @@ public class Main : MonoBehaviour
 
     }
 
-
     void OnAdError(OguryThumbnailAd oguryThumbnailAd, OguryError error)
     {
         logger.LogOnAdErrordMessage(String.Format("Ad Error {0} - {1}", error.ErrorCode, error.Description));
     }
-
 
     private void OnDestroy()
     {

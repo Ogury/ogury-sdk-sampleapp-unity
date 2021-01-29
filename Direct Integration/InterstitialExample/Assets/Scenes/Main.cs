@@ -84,7 +84,6 @@ public class Main : MonoBehaviour
         //Load Ad formats
     }
 
-
     private void StartSdks()
     {
         Ogury.StartAds();
@@ -112,12 +111,10 @@ public class Main : MonoBehaviour
     }
 
 
-
     void OnAdError(OguryInterstitialAd interstitialAd, OguryError error)
     {
         logger.LogOnAdErrordMessage(String.Format("Ad Error {0} - {1}", error.ErrorCode, error.Description));
     }
-
 
     private void OnDestroy()
     {

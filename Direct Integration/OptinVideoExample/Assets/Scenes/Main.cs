@@ -52,7 +52,6 @@ public class Main : MonoBehaviour
                 rewardItem.Name, rewardItem.Value));
         };
 
-
         optinVideoAd.OnAdNotAvailable += ad =>
         {
             logger.LogAdNotAvailableMessage();
@@ -69,7 +68,6 @@ public class Main : MonoBehaviour
         };
 
         optinVideoAd.OnAdError += OnAdError;
-
     }
 
 
@@ -88,7 +86,6 @@ public class Main : MonoBehaviour
         StartSdks();
         // load ad formats
     }
-
 
     private void StartSdks()
     {
@@ -116,12 +113,10 @@ public class Main : MonoBehaviour
         }
     }
 
-
     void OnAdError(OguryOptinVideoAd oguryOptinVideoAd, OguryError error)
     {
         logger.LogOnAdErrordMessage(String.Format("Ad Error {0} - {1}", error.ErrorCode, error.Description));
     }
-
 
     private void OnDestroy()
     {

@@ -27,10 +27,7 @@ public class Main : MonoBehaviour
     {
         logger = FindObjectOfType(typeof(Logger)) as Logger;
 
-
         Ogury.Start(AndroidAssetKey, IosAssetKey);
-
-
 
         smallBanner = new OguryBannerAd(AndroidSmallBannerAdUnitId,
             IosSmallBannerAdUnitId, OguryBannerAdSize.SmallBanner320X50);
@@ -64,7 +61,6 @@ public class Main : MonoBehaviour
             logger.LogAdNotLoadedMessage("MPU");
         };
 
-
         smallBanner.OnAdDisplayed += ad =>
         {
             logger.LogOnAdDisplayedMessage("Small Banner");
@@ -74,8 +70,6 @@ public class Main : MonoBehaviour
         {
             logger.LogOnAdDisplayedMessage("MPU");
         };
-
-
     }
 
 
@@ -95,7 +89,6 @@ public class Main : MonoBehaviour
         //Load Ad formats
     }
 
-
     public void LoadMPUBannerAd()
     {
         logger.LogLoadingAdMessage("MPU");
@@ -108,8 +101,6 @@ public class Main : MonoBehaviour
         logger.LogLoadingAdMessage("Small Banner");
         smallBanner.Load();
     }
-
-
 
     private void StartSdks()
     {
@@ -138,7 +129,6 @@ public class Main : MonoBehaviour
     {
         mpuBanner.Show(OguryAdGravity.Bottom, 0, 250);
     }
-
 
     private void OnDestroy()
     {
