@@ -19,7 +19,7 @@ iOS:
 - Xcode 11+
 
 ## Installation
-Install the latest version of [Unity plugin](https://doc.ogury.co/release-notes/unity). Follow the [installation instructions](https://doc.ogury.co/unity/#step-2-import-the-ogury-sdk).
+Install the latest version of [Unity plugin](https://docs.ogury.co/release-notes/unity). Follow the [installation instructions](https://docs.ogury.co/unity/#step-2-import-the-ogury-sdk).
 The plugin will install all the necessary dependencies automatically for you to run the project. 
 If you want to manually resolve the project dependencies, you can trigger the next step:
 
