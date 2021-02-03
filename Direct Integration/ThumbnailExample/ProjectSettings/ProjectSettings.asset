@@ -159,7 +159,7 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.ogury.android.sampleApp
     Standalone: com.Company.ProductName
-    iOS: com.ogury.android.sampleApp
+    iOS: com.ogury.ios.sampleApp
   buildNumber: {}
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 16
